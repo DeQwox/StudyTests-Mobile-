@@ -1,0 +1,7 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="OnlineTestingClient.Views.Controls.LoadingOverlay">
+  <Border Background="#80000000" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <TextBlock Text="Loading..." HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+  </Border>
+</UserControl>

@@ -1,0 +1,29 @@
+<!-- Views/MainWindow.axaml (головне вікно) -->
+<Window xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:views="using:OnlineTestingClient.Views"
+    x:Class="OnlineTestingClient.Views.MainWindow"
+        Title="Лаба №7 — Онлайн тестування"
+        Width="1100" Height="700">
+
+    <Grid>
+        <ContentControl Content="{Binding CurrentView}"/>
+
+        <!-- Навігація зліва (після логіну) -->
+        <StackPanel Width="200" Background="#333" IsVisible="{Binding IsLoggedIn}">
+            <Button Content="Створити тест" Command="{Binding ShowCreateTest}" Margin="10"/>
+            <Button Content="Додати питання" Command="{Binding ShowAddQuestion}" Margin="10"/>
+            <Button Content="Пройти тест" Command="{Binding ShowPassTest}" Margin="10"/>
+            <Button Content="Статистика" Command="{Binding ShowStatistics}" Margin="10"/>
+            <Button Content="About" Command="{Binding ShowAbout}" Margin="10"/>
+        </StackPanel>
+
+        <!-- Анімований loading -->
+        <Border Background="#AA000000" IsVisible="{Binding IsLoading}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar IsIndeterminate="True" Width="100" Height="100"/>
+                <TextBlock Text="Зачекайте..." FontSize="28" Foreground="White"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

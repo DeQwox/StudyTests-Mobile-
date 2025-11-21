@@ -1,0 +1,44 @@
+<!-- Views/PassTestView.axaml -->
+<UserControl xmlns="https://github.com/avaloniaui">
+    <ScrollViewer>
+        <StackPanel Margin="40" Spacing="20">
+            <TextBlock Text="Пройти тест" FontSize="24" HorizontalAlignment="Center"/>
+
+            <ComboBox ItemsSource="{Binding AvailableTests}"
+                      SelectedItem="{Binding SelectedTest}"
+                      DisplayMemberBinding="{Binding Name}"
+                      IsVisible="{Binding !IsTestStarted}"/>
+
+            <Button Content="Почати тест" 
+                    Command="{Binding StartTestCommand}"
+                    IsVisible="{Binding !IsTestStarted}"/>
+
+            <ItemsControl ItemsSource="{Binding Questions}" IsVisible="{Binding IsTestStarted}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,30,0,0">
+                            <TextBlock Text="{Binding Description}" FontSize="16" FontWeight="Bold"/>
+                            <ItemsControl ItemsSource="{Binding Answers}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Spacing="8"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton Content="{Binding}"
+                                                     GroupName="{Binding $parent[ItemsControl].($parent[ItemsControl].DataContext).Questions.IndexOf($parent[ItemsControl].DataContext)]}"
+                                                     IsChecked="{Binding $parent[ItemsControl].($parent[ItemsControl].DataContext).SelectedAnswers[$parent[ItemsControl].($parent[ItemsControl].DataContext).Questions.IndexOf($parent[ItemsControl.DataContext)], Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Button Content="Здати тест" Command="{Binding SubmitTestCommand}" IsVisible="{Binding IsTestStarted}"/>
+            <TextBlock Text="{Binding Result}" FontSize="18" Foreground="Green"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

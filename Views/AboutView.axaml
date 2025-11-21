@@ -1,0 +1,9 @@
+<!-- Views/AboutView.axaml -->
+<UserControl xmlns="https://github.com/avaloniaui">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+        <TextBlock Text="Лабораторна робота №7" FontSize="24"/>
+        <TextBlock Text="Кросплатформний клієнт на Avalonia + .NET 9"/>
+        <TextBlock Text="Виконав: [ТВОЄ ПІБ]"/>
+        <TextBlock Text="2025"/>
+    </StackPanel>
+</UserControl>
