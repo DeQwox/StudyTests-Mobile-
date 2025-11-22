@@ -1,4 +1,3 @@
-// Views/MainWindow.axaml.cs (обов’язково!)
 using Avalonia.Controls;
 
 namespace OnlineTestingClient.Views;

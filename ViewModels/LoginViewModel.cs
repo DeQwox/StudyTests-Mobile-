@@ -1,39 +1,37 @@
-// ViewModels/LoginViewModel.cs
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using OnlineTestingClient.Services;
+using OnlineTestingClient.ViewModels;
+using System;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace OnlineTestingClient.ViewModels;
 
-public partial class LoginViewModel : ViewModelBase
+public partial class LoginViewModel(MainWindowViewModel main) : ViewModelBase
 {
-    private readonly MainWindowViewModel _main;
-
-    [ObservableProperty] private string login = "";
+    private readonly MainWindowViewModel _main = main;
+    [ObservableProperty] private string username = "";
     [ObservableProperty] private string password = "";
-    [ObservableProperty] private string errorMessage = "";
+    private readonly HttpClient _httpClient = new() { BaseAddress = new Uri("https://localhost:5001/") };
+    public string UserId { get; private set; } = "";
+    [ObservableProperty] private bool isLoading;
 
-    public LoginViewModel(MainWindowViewModel main) => _main = main;
+    private async Task FetchData()
+    {
+        IsLoading = true;
+        await Login();
+        IsLoading = false;
+    }
 
     [RelayCommand]
-    private async Task LoginAsync()
+    private async Task Login()
     {
-        _main.IsLoading = true;
-        ErrorMessage = "";
-
-        var token = await new AuthService().LoginAsync(Login, Password);
-
-        if (token != null)
+        var response = await _httpClient.PostAsJsonAsync("api/auth/login", new { Username, Password });
+        if (response.IsSuccessStatusCode)
         {
-            _main.IsLoggedIn = true;
-            _main.ShowAppropriateView();
+            var result = await response.Content.ReadFromJsonAsync<dynamic>();
+            UserId = result!.userId;
         }
-        else
-        {
-            ErrorMessage = "Невірний логін або пароль";
-        }
-
-        _main.IsLoading = false;
     }
 }

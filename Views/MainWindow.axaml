@@ -17,13 +17,5 @@
             <Button Content="Статистика" Command="{Binding ShowStatistics}" Margin="10"/>
             <Button Content="About" Command="{Binding ShowAbout}" Margin="10"/>
         </StackPanel>
-
-        <!-- Анімований loading -->
-        <Border Background="#AA000000" IsVisible="{Binding IsLoading}">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <ProgressBar IsIndeterminate="True" Width="100" Height="100"/>
-                <TextBlock Text="Зачекайте..." FontSize="28" Foreground="White"/>
-            </StackPanel>
-        </Border>
     </Grid>
 </Window>
