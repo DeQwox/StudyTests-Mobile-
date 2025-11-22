@@ -1,0 +1,13 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:OnlineTestingClient.ViewModels"
+             xmlns:controls="clr-namespace:Avalonia.Controls.DataGrid;assembly=Avalonia.Controls.DataGrid"
+             x:Class="OnlineTestingClient.Views.ResultsView"
+             x:DataType="vm:ResultsViewModel">
+  <Grid>
+    <!-- <controls:DataGrid Items="{Binding Results}" AutoGenerateColumns="True" IsVisible="{Binding !IsLoading}"/>
+    <Panel IsVisible="{Binding IsLoading}"> -->
+      <!-- Loading spinner -->
+    <!-- </Panel> -->
+  </Grid>
+</UserControl>

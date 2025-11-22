@@ -1,50 +1,24 @@
-// ViewModels/MainWindowViewModel.cs
-using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using OnlineTestingClient.Models;
-using OnlineTestingClient.Services;
+using OnlineTestingClient.ViewModels;
 
 namespace OnlineTestingClient.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    [ObservableProperty] private ViewModelBase currentView = null!;
-    [ObservableProperty] private bool isLoggedIn;
-    [ObservableProperty] private bool isLoading;
+    [ObservableProperty] private ViewModelBase? currentPage;
+    private string _userId;
 
-    public LoginViewModel LoginView { get; }
-    public CreateTestViewModel CreateTestView { get; }
-    public AddQuestionViewModel AddQuestionView { get; }
-    public PassTestViewModel PassTestView { get; }
-    private StatisticsViewModel? _statisticsView;
-    public StatisticsViewModel StatisticsView => _statisticsView ??= new StatisticsViewModel(this);
-    public AboutViewModel AboutView { get; }
-
-    public MainWindowViewModel()
-    {
-        LoginView = new(this);
-        CreateTestView = new(this);
-        AddQuestionView = new(this);
-        PassTestView = new(this);
-        // StatisticsView is created lazily when requested to avoid loading heavy data at startup.
-        AboutView = new();
-
-        CurrentView = LoginView;
+    public MainWindowViewModel(string userId) 
+    { 
+        _userId = userId; 
+        CurrentPage = new HomeViewModel(_userId);
     }
 
-    public void ShowAppropriateView()
-    {
-        CurrentView = AppState.CurrentUserRole == "Teacher" ? CreateTestView : PassTestView;
-    }
-    public void ShowCreateTest() => CurrentView = CreateTestView;
-    public void ShowAddQuestion() => CurrentView = AddQuestionView;
-    public void ShowPassTest() => CurrentView = PassTestView;
-    public void ShowStatistics()
-    {
-        CurrentView = StatisticsView;
-        // Start loading statistics in background when the view is shown.
-        _ = StatisticsView.LoadStatsAsync();
-    }
-    public void ShowAbout() => CurrentView = AboutView;
+    [RelayCommand] private void NavigateHome() => CurrentPage = new HomeViewModel(_userId);
+    [RelayCommand] private void NavigateTests() => CurrentPage = new TestsViewModel(_userId);
+    [RelayCommand] private void NavigateResults() => CurrentPage = new ResultsViewModel(_userId);
+    [RelayCommand] private void NavigateStatistics() => CurrentPage = new ChartViewModel(_userId);
+    [RelayCommand] private void NavigateAbout() => CurrentPage = new AboutViewModel();
+    [RelayCommand] private void Logout() { /* Navigate to login or close */ }
 }

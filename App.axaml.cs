@@ -9,7 +9,7 @@ namespace OnlineTestingClient;
 public partial class App : Application
 {
     public static string? CurrentToken { get; set; }
-    public static MainWindowViewModel Services { get; internal set; } = new();
+    public static MainWindowViewModel Services { get; internal set; } = new("");
 
     public override void Initialize()
     {

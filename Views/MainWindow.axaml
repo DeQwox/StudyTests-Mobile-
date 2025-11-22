@@ -1,21 +1,17 @@
-<!-- Views/MainWindow.axaml (головне вікно) -->
 <Window xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:views="using:OnlineTestingClient.Views"
-    x:Class="OnlineTestingClient.Views.MainWindow"
-        Title="Лаба №7 — Онлайн тестування"
-        Width="1100" Height="700">
-
-    <Grid>
-        <ContentControl Content="{Binding CurrentView}"/>
-
-        <!-- Навігація зліва (після логіну) -->
-        <StackPanel Width="200" Background="#333" IsVisible="{Binding IsLoggedIn}">
-            <Button Content="Створити тест" Command="{Binding ShowCreateTest}" Margin="10"/>
-            <Button Content="Додати питання" Command="{Binding ShowAddQuestion}" Margin="10"/>
-            <Button Content="Пройти тест" Command="{Binding ShowPassTest}" Margin="10"/>
-            <Button Content="Статистика" Command="{Binding ShowStatistics}" Margin="10"/>
-            <Button Content="About" Command="{Binding ShowAbout}" Margin="10"/>
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="OnlineTestingClient.Views.MainWindow"
+        Title="StudyTests Mobile">
+    <Grid RowDefinitions="Auto,*">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10">
+            <Button Command="{Binding NavigateHome}">Home</Button>
+            <Button Command="{Binding NavigateTests}">Tests</Button>
+            <Button Command="{Binding NavigateResults}">Results</Button>
+            <Button Command="{Binding NavigateStatistics}">Statistics</Button>
+            <Button Command="{Binding NavigateAbout}">About</Button>
+            <Button Command="{Binding Logout}">Logout</Button>
         </StackPanel>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentPage}"
+                        ContentTemplate="{StaticResource Locator}" />
     </Grid>
 </Window>

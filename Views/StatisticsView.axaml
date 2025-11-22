@@ -1,8 +1,0 @@
-<!-- Views/StatisticsView.axaml -->
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
-    <lvc:CartesianChart Series="{Binding Series}"
-                        XAxes="{Binding XAxes}"
-                        YAxes="{Binding YAxes}"
-                        Height="500"/>
-</UserControl>

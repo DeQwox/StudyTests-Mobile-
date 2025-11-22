@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="OnlineTestingClient.Views.HomeView">
+  <Grid>
+    <StackPanel Spacing="10" IsVisible="{Binding !IsLoading}">
+      <TextBlock Text="Welcome to StudyTests Dashboard" FontSize="20" FontWeight="Bold"/>
+      <TextBlock Text="{Binding SummaryMessage}"/>
+      <!-- Add more bound elements, e.g., for average score -->
+    </StackPanel>
+    <Panel IsVisible="{Binding IsLoading}">
+      <!-- Loading spinner here, e.g., <LoadingSpinner/> -->
+    </Panel>
+  </Grid>
+</UserControl>
