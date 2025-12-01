@@ -1,22 +1,76 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:OnlineTestingClient.ViewModels"
-             x:Class="OnlineTestingClient.Views.TestsView"
-             x:DataType="vm:TestsViewModel">
-  <Grid>
-    <!-- <ListBox Items="{Binding Tests}" IsVisible="{Binding !IsLoading}">
+             x:Class="OnlineTestingClient.Views.TestsView">
+  <Grid RowDefinitions="Auto,*">
+    
+    <!-- Join Test Section -->
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="10" HorizontalAlignment="Center">
+        <TextBox Text="{Binding TestCode}" Watermark="Введіть код тесту" Width="200"/>
+        <Button Command="{Binding JoinTestCommand}" Content="Пройти тест"/>
+    </StackPanel>
+
+    <ListBox Grid.Row="1" ItemsSource="{Binding Tests}" IsVisible="{Binding !HasError}">
       <ListBox.ItemTemplate>
         <DataTemplate>
-          <StackPanel Orientation="Horizontal" Spacing="10">
-            <TextBlock Text="{Binding Name}"/>
-            <Button Command="{Binding DataContext.TakeTestCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                    CommandParameter="{Binding Id}">Take Test</Button>
-          </StackPanel>
+          <Border BorderBrush="Gray" BorderThickness="0,0,0,1" Padding="10">
+              <StackPanel Spacing="5">
+                  <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding QuestionCount, StringFormat='({0} питань)'}" 
+                               IsVisible="{Binding DataContext.IsTeacher, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                               VerticalAlignment="Center" Foreground="Gray"/>
+                  </StackPanel>
+                  
+                  <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontStyle="Italic"/>
+
+                  <StackPanel Orientation="Horizontal" Spacing="20" IsVisible="{Binding DataContext.IsTeacher, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                       <TextBlock Text="{Binding CreatedAt, StringFormat='Створено: {0:g}'}" FontSize="12" Foreground="Gray"/>
+                       <TextBlock Text="{Binding ValidUntil, StringFormat='Дійсний до: {0:g}'}" FontSize="12" Foreground="Gray"/>
+                  </StackPanel>
+
+                  <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+                    <!-- Take Test Button (Student only) -->
+                    <Button Command="{Binding DataContext.TakeTestCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding .}"
+                            IsVisible="{Binding DataContext.IsStudent, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        Пройти тест
+                    </Button>
+
+                    <!-- View Test Button (User only) -->
+                    <Button Command="{Binding DataContext.ViewTestCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding .}"
+                            IsVisible="{Binding DataContext.IsUser, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        Переглянути тест
+                    </Button>
+
+                    <!-- Teacher Buttons -->
+                    <StackPanel Orientation="Horizontal" Spacing="10" IsVisible="{Binding DataContext.IsTeacher, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                        <Button Command="{Binding DataContext.ViewTestCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding .}">
+                            Переглянути питання
+                        </Button>
+                        <Button Command="{Binding DataContext.EditTestCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                CommandParameter="{Binding .}">
+                            Редагувати тест
+                        </Button>
+                    </StackPanel>
+                  </StackPanel>
+              </StackPanel>
+          </Border>
         </DataTemplate>
       </ListBox.ItemTemplate>
-    </ListBox> -->
-    <Panel IsVisible="{Binding IsLoading}">
-      <!-- Loading spinner -->
-    </Panel>
+    </ListBox>
+
+    <TextBlock Grid.Row="1" Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding HasError}"/>
+    
+    <Border Grid.RowSpan="2" Background="#AA000000" IsVisible="{Binding IsLoading}">
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Background="#1F2937" Padding="40" CornerRadius="16">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Завантаження..." Foreground="White" HorizontalAlignment="Center"/>
+                <ProgressBar IsIndeterminate="True" Width="100"/>
+            </StackPanel>
+        </Border>
+    </Border>
   </Grid>
 </UserControl>

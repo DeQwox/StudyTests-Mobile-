@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:OnlineTestingClient.ViewModels"
+             x:Class="OnlineTestingClient.Views.ViewTestView">
+    <UserControl.Styles>
+        <Style Selector="TextBlock.correct">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Spacing="10" Margin="0,0,0,20">
+            <Button Command="{Binding GoBackCommand}" Content="← Back" />
+            <TextBlock Text="{Binding Test.Name}" FontSize="24" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Test.Description}" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- Questions List -->
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Questions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,10">
+                            <StackPanel Spacing="10">
+                                <StackPanel Orientation="Horizontal" Spacing="10">
+                                    <TextBlock Text="{Binding Description}" FontWeight="Bold" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding Score, StringFormat='({0} points)'}" Foreground="Gray"/>
+                                </StackPanel>
+                                
+                                <ItemsControl ItemsSource="{Binding Answers}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5">
+                                                <!-- Checkmark for correct answer -->
+                                                <TextBlock Text="✓" Foreground="Green" FontWeight="Bold" 
+                                                           IsVisible="{Binding IsCorrect}" Width="20"/>
+                                                <TextBlock Text=" " IsVisible="{Binding !IsCorrect}" Width="20"/>
+                                                
+                                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" 
+                                                           Classes.correct="{Binding IsCorrect}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

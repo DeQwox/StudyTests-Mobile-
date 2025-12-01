@@ -1,0 +1,97 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:OnlineTestingClient.ViewModels"
+             x:Class="OnlineTestingClient.Views.EditTestView">
+  <ScrollViewer>
+    <StackPanel Margin="20" Spacing="15" MaxWidth="800" HorizontalAlignment="Center">
+      <TextBlock Text="Редагувати тест" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+      <!-- Test Details -->
+      <Border Background="White" CornerRadius="8" Padding="15" BoxShadow="0 2 10 0 #10000000">
+        <StackPanel Spacing="10">
+          <TextBox Text="{Binding Name}" Watermark="Назва тесту" />
+          <TextBox Text="{Binding Description}" Watermark="Опис" AcceptsReturn="True" Height="60"/>
+          <TextBox Text="{Binding Password}" Watermark="Пароль доступу (опціонально)" PasswordChar="*"/>
+          <StackPanel>
+            <TextBlock Text="Дійсний до:"/>
+            <DatePicker SelectedDate="{Binding ValidUntil}"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Text="Питання" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,0"/>
+
+      <!-- Questions List -->
+      <ItemsControl ItemsSource="{Binding Questions}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,15" BoxShadow="0 2 5 0 #10000000">
+              <StackPanel Spacing="10">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox Text="{Binding Description}" Watermark="Текст питання" Grid.Column="0"/>
+                    <!-- Simplified binding using ReflectionBinding which is safer here -->
+                    <Button Command="{Binding $parent[UserControl].DataContext.RemoveQuestionCommand}" 
+                            CommandParameter="{Binding}"
+                            Content="❌" Background="Transparent" Foreground="Red" Grid.Column="1" Margin="10,0,0,0"/>
+                </Grid>
+                
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="Бали:" VerticalAlignment="Center"/>
+                    <NumericUpDown Value="{Binding Score}" Minimum="1" Maximum="100" Increment="1"/>
+                </StackPanel>
+
+                <TextBlock Text="Варіанти відповідей (виберіть правильний індекс):"/>
+                
+                <!-- Answers Management -->
+                <ItemsControl ItemsSource="{Binding Answers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,2">
+                                <TextBox Text="{Binding}" Grid.Column="0"/>
+                                <!-- Using ReflectionBinding to reach CreateQuestionViewModel context -->
+                                <Button Command="{Binding $parent[ItemsControl].DataContext.RemoveAnswerCommand}" 
+                                        CommandParameter="{Binding}"
+                                        Content="-" Grid.Column="1" Margin="5,0,0,0"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBox Text="{Binding NewAnswerText}" Watermark="Новий варіант" Width="200"/>
+                    <Button Command="{Binding AddAnswerCommand}" Content="+"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="Індекс правильної відповіді:" VerticalAlignment="Center"/>
+                    <NumericUpDown Value="{Binding CorrectAnswerIndex}" Minimum="0" Increment="1"/>
+                </StackPanel>
+
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <Button Command="{Binding AddQuestionCommand}" Content="+ Додати питання" HorizontalAlignment="Center"/>
+
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center" IsVisible="{Binding HasError}"/>
+      <TextBlock Text="{Binding SuccessMessage}" Foreground="Green" FontWeight="Bold" HorizontalAlignment="Center" IsVisible="{Binding HasSuccess}"/>
+
+      <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center" Margin="0,20,0,0">
+        <Button Command="{Binding SaveTestCommand}" Content="Зберегти зміни" Background="#10B981" Foreground="White" Padding="20,10"/>
+        <Button Command="{Binding CancelCommand}" Content="Скасувати" Background="#EF4444" Foreground="White" Padding="20,10"/>
+      </StackPanel>
+
+      <Border Background="#AA000000" IsVisible="{Binding IsLoading}">
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Background="#1F2937" Padding="40" CornerRadius="16">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Saving..." Foreground="White" HorizontalAlignment="Center"/>
+                <ProgressBar IsIndeterminate="True" Width="100"/>
+            </StackPanel>
+        </Border>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -7,40 +7,79 @@ using System;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Linq;
+using OnlineTestingClient.Models;
+using OnlineTestingClient.Services;
 
 namespace OnlineTestingClient.ViewModels;
 
 public partial class ChartViewModel : ViewModelBase
 {
-    public ISeries[] Series { get; set; } = [];
+    [ObservableProperty] private ISeries[] series = [];
+    [ObservableProperty] private Axis[] xAxes = [new Axis { Labels = new ObservableCollection<string>() }];
+    [ObservableProperty] private Axis[] yAxes = [new Axis { MinLimit = 0, MaxLimit = 100 }];
 
-    public Axis[] XAxes { get; set; } = [new Axis { Labels = new ObservableCollection<string>() }];
-    public Axis[] YAxes { get; set; } = [new Axis { MinLimit = 0, MaxLimit = 100 }];
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(HasError))] private string errorMessage = "";
+    public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
 
-    private readonly HttpClient _httpClient = new() { BaseAddress = new Uri("https://localhost:5001/") };
+    [ObservableProperty] private ObservableCollection<TeacherPassedTestDto> teacherPassedTests = new();
+    [ObservableProperty] private ObservableCollection<StudentPassedTestDto> studentPassedTests = new();
+
+    [ObservableProperty] private bool isEmpty = false;
+
+    private readonly IApiService _apiService;
     private string _userId;
+
+    public bool IsTeacher => string.Equals(AppState.CurrentUserRole, "Teacher", StringComparison.OrdinalIgnoreCase);
+    public bool IsStudent => string.Equals(AppState.CurrentUserRole, "Student", StringComparison.OrdinalIgnoreCase);
 
     public ChartViewModel(string userId)
     {
         _userId = userId;
+        _apiService = new ApiService();
         LoadData();
     }
 
     private async void LoadData()
     {
-        var scores = await _httpClient.GetFromJsonAsync<List<dynamic>>($"api/tests/last10?userId={_userId}");
-
-        var values = scores!.Select(s => (double)s.score).ToArray();
-
-        var labels = scores!.Select(s => ((DateTime)s.date).ToString("MM/dd")).ToArray();
-        XAxes = [new Axis { Labels = labels }];
-
-        Series =
-        [
-            new LineSeries<double>
+        IsLoading = true;
+        ErrorMessage = "";
+        IsEmpty = false;
+        try
+        {
+            if (IsTeacher)
             {
-                Values = values
+                var results = await _apiService.GetPassedTestsByTeacherAsync();
+                TeacherPassedTests = new ObservableCollection<TeacherPassedTestDto>(results);
+                IsEmpty = !results.Any();
             }
-        ];
+            else
+            {
+                var results = await _apiService.GetPassedTestsByStudentAsync();
+                StudentPassedTests = new ObservableCollection<StudentPassedTestDto>(results);
+
+                if (results.Any())
+                {
+                    // Sort by date for the chart
+                    var sorted = results.OrderBy(r => r.PassedAt).ToList();
+                    var values = sorted.Select(s => s.Score).ToArray();
+                    var labels = sorted.Select(s => s.PassedAt.ToString("MM/dd HH:mm")).ToArray();
+                    
+                    XAxes = [new Axis { Labels = labels }];
+                    Series = [ new LineSeries<double> { Values = values, Name = "Score" } ];
+                }
+                else
+                {
+                    IsEmpty = true;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Failed to load statistics: " + ex.Message;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 }

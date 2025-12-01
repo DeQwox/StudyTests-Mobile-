@@ -3,11 +3,17 @@
              x:Class="OnlineTestingClient.Views.HomeView">
   <Grid>
     <StackPanel Spacing="10" IsVisible="{Binding !IsLoading}">
-      <TextBlock Text="Welcome to StudyTests Dashboard" FontSize="20" FontWeight="Bold"/>
+      <TextBlock Text="Ласкаво просимо до StudyTests Dashboard" FontSize="20" FontWeight="Bold"/>
       <TextBlock Text="{Binding SummaryMessage}"/>
     </StackPanel>
-    <Panel IsVisible="{Binding IsLoading}">
-      <!-- Loading spinner here, e.g., <LoadingSpinner/> -->
-    </Panel>
+    
+    <Border Background="#AA000000" IsVisible="{Binding IsLoading}">
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Background="#1F2937" Padding="40" CornerRadius="16">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Завантаження..." Foreground="White" HorizontalAlignment="Center"/>
+                <ProgressBar IsIndeterminate="True" Width="100"/>
+            </StackPanel>
+        </Border>
+    </Border>
   </Grid>
 </UserControl>

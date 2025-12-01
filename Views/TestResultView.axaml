@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:OnlineTestingClient.ViewModels"
+             x:Class="OnlineTestingClient.Views.TestResultView">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+        <TextBlock Text="{Binding StatusMessage}" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{Binding StatusColor}"/>
+        <TextBlock Text="Тест завершено!" FontSize="30" FontWeight="Bold" HorizontalAlignment="Center" Foreground="#10B981"/>
+        
+        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" IsVisible="{Binding IsSuccess}">
+            <TextBlock Text="Ваш результат:" FontSize="24"/>
+            <TextBlock Text="{Binding Result.Score}" FontSize="24" FontWeight="Bold" Foreground="#1E3A8A"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center" Margin="0,20,0,0">
+            <Button Command="{Binding GoToTestsCommand}" Content="До списку тестів" Padding="15,10"/>
+            <Button Command="{Binding GoHomeCommand}" Content="На головну" Padding="15,10"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

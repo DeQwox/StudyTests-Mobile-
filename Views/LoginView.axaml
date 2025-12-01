@@ -1,18 +1,112 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="https://github.com/avaloniaui"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d">
+             x:Class="OnlineTestingClient.Views.LoginView"
+             Background="#F5F7FA">
 
-    <StackPanel>
-        <TextBox Text="{Binding Username}" />
-        <TextBox Text="{Binding Password}" PasswordChar="*" />
-        <Button Command="{Binding LoginCommand}">Login</Button>
-    </StackPanel>
+    <Grid RowDefinitions="*,Auto,*" Margin="40">
 
-    <Grid>
-        <Panel IsVisible="{Binding IsLoading}">
-            <LoadingSpinner />
-        </Panel>
+        <!-- Основний контент -->
+        <StackPanel Grid.Row="1"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Spacing="20"
+                    MaxWidth="400">
+
+            <TextBlock Text="{Binding TitleText}"
+                       FontSize="32"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       Foreground="#1E3A8A"/>
+
+            <Border Background="White"
+                    CornerRadius="16"
+                    Padding="35"
+                    BoxShadow="0 10 40 0 #20000000">
+
+                <StackPanel Spacing="18">
+                    <TextBox Watermark="Логін"
+                             Text="{Binding Username}"
+                             FontSize="16"/>
+
+                    <TextBox Watermark="Пароль"
+                             Text="{Binding Password}"
+                             PasswordChar="*"
+                             FontSize="16"/>
+
+                    <!-- Registration Fields -->
+                    <StackPanel Spacing="18" IsVisible="{Binding IsRegisterMode}">
+                        <TextBox Watermark="Повне ім'я" Text="{Binding FullName}" FontSize="16"/>
+                        <TextBox Watermark="Email" Text="{Binding Email}" FontSize="16"/>
+                        <TextBox Watermark="Телефон" Text="{Binding PhoneNumber}" FontSize="16"/>
+                        
+                        <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                            <TextBlock Text="Роль:" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" Width="150"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Login Button -->
+                    <Button Content="Увійти"
+                            Command="{Binding LoginCommand}"
+                            IsVisible="{Binding !IsRegisterMode}"
+                            HorizontalAlignment="Stretch"
+                            Height="48"
+                            FontSize="17"
+                            Background="#1E40AF"
+                            Foreground="White"
+                            CornerRadius="10"/>
+
+                    <!-- Register Button -->
+                    <Button Content="Зареєструватися"
+                            Command="{Binding RegisterCommand}"
+                            IsVisible="{Binding IsRegisterMode}"
+                            HorizontalAlignment="Stretch"
+                            Height="48"
+                            FontSize="17"
+                            Background="#10B981"
+                            Foreground="White"
+                            CornerRadius="10"/>
+
+                    <Button Content="{Binding ModeButtonText}"
+                            Command="{Binding ToggleModeCommand}"
+                            Background="Transparent"
+                            Foreground="#1E40AF"
+                            HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#DC2626"
+                               HorizontalAlignment="Center"
+                               IsVisible="{Binding HasError}"/>
+                               
+                    <TextBlock Text="{Binding SuccessMessage}"
+                               Foreground="Green"
+                               HorizontalAlignment="Center"
+                               IsVisible="{Binding HasSuccess}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!-- Оверлей завантаження (тепер видно, коли активний) -->
+        <Border Grid.Row="0"
+                Grid.RowSpan="3"
+                Background="#AA000000"
+                IsVisible="{Binding IsLoading}"
+                ZIndex="999">
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="#1F2937"
+                    Padding="40"
+                    CornerRadius="16">
+                <StackPanel>
+                    <TextBlock Text="Зачекайте..."
+                               FontSize="24"
+                               Foreground="White"/>
+                    <ProgressBar IsIndeterminate="True"
+                                 Width="200"
+                                 Margin="0,15,0,0"/>
+                </StackPanel>
+            </Border>
+        </Border>
+
     </Grid>
 </UserControl>

@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="OnlineTestingClient.Views.SuccessView"
+             Background="#F0FDF4">
+
+    <StackPanel HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="20">
+
+        <TextBlock Text="Вітаємо!"
+                   FontSize="40"
+                   FontWeight="Bold"
+                   Foreground="#16A34A"
+                   HorizontalAlignment="Center"/>
+
+        <TextBlock FontSize="24"
+                   HorizontalAlignment="Center">
+            <Run Text="Ви успішно увійшли як користувач ID: "/>
+            <Run Text="{Binding UserId}" Foreground="#15803D" FontWeight="SemiBold"/>
+        </TextBlock>
+
+        <Button Content="Вийти"
+                Command="{Binding $parent[Window].DataContext.ShowLogin}"
+                Width="200"
+                Height="50"
+                FontSize="18"
+                Background="#DC2626"
+                Foreground="White"
+                CornerRadius="8"/>
+    </StackPanel>
+</UserControl>

@@ -2,10 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:OnlineTestingClient"
              x:Class="OnlineTestingClient.App">
+
+    <!-- Використовуємо лише ViewLocator -->
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
     <Application.Styles>
+        <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
     </Application.Styles>
-    <Application.Resources>
-        <local:ViewLocator x:Key="Locator" />
-    </Application.Resources>
+
 </Application>

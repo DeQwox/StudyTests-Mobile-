@@ -1,6 +1,4 @@
-﻿// Program.cs
-using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.ReactiveUI;
 
 namespace OnlineTestingClient;
@@ -12,10 +10,10 @@ class Program
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
 
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<App>()
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
-            .UseReactiveUI();
+            .UseReactiveUI();               // це працює, бо у тебе є Avalonia.ReactiveUI 11.3.8
 }

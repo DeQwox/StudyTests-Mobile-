@@ -1,17 +1,35 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:OnlineTestingClient.ViewModels"
+        xmlns:local="clr-namespace:OnlineTestingClient"
         x:Class="OnlineTestingClient.Views.MainWindow"
-        Title="StudyTests Mobile">
+        Title="StudyTests Mobile"
+        Width="1000" Height="700"
+        WindowStartupLocation="CenterScreen"
+        x:DataType="vm:MainWindowViewModel">
+
+    <Window.DataTemplates>
+        <local:ViewLocator/>
+    </Window.DataTemplates>
+
     <Grid RowDefinitions="Auto,*">
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10">
-            <Button Command="{Binding NavigateHome}">Home</Button>
-            <Button Command="{Binding NavigateTests}">Tests</Button>
-            <Button Command="{Binding NavigateResults}">Results</Button>
-            <Button Command="{Binding NavigateStatistics}">Statistics</Button>
-            <Button Command="{Binding NavigateAbout}">About</Button>
-            <Button Command="{Binding Logout}">Logout</Button>
-        </StackPanel>
-        <ContentControl Grid.Row="1" Content="{Binding CurrentPage}"
-                        ContentTemplate="{StaticResource Locator}" />
+        <!-- Navigation Bar -->
+        <Border Grid.Row="0" Background="#1E3A8A" Padding="10" IsVisible="{Binding IsLoggedIn}">
+            <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <Button Command="{Binding NavigateHomeCommand}" Content="Головна" Background="Transparent" Foreground="White"/>
+                <Button Command="{Binding NavigateTestsCommand}" Content="Тести" Background="Transparent" Foreground="White"/>
+                <Button Command="{Binding NavigateResultsCommand}" Content="Результати" Background="Transparent" Foreground="White" IsVisible="{Binding IsStudent}"/>
+                <Button Command="{Binding NavigateStatisticsCommand}" Content="Статистика" Background="Transparent" Foreground="White" IsVisible="{Binding IsTeacher}"/>
+                <Button Command="{Binding NavigateCreateTestCommand}" Content="Створити тест" Background="Transparent" Foreground="White" IsVisible="{Binding IsTeacher}"/>
+                <Button Command="{Binding NavigateAboutCommand}" Content="Про нас" Background="Transparent" Foreground="White"/>
+                <Button Command="{Binding LogoutCommand}" Content="Вийти" Background="#DC2626" Foreground="White" Margin="20,0,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <Border Grid.Row="1" Background="#F3F4F6">
+            <ContentControl Content="{Binding CurrentPage}" Margin="20"/>
+        </Border>
     </Grid>
+
 </Window>

@@ -1,13 +1,20 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:OnlineTestingClient.ViewModels"
-             xmlns:controls="clr-namespace:Avalonia.Controls.DataGrid;assembly=Avalonia.Controls.DataGrid"
-             x:Class="OnlineTestingClient.Views.ResultsView"
-             x:DataType="vm:ResultsViewModel">
+             xmlns:controls="using:Avalonia.Controls"
+             x:Class="OnlineTestingClient.Views.ResultsView">
   <Grid>
-    <!-- <controls:DataGrid Items="{Binding Results}" AutoGenerateColumns="True" IsVisible="{Binding !IsLoading}"/>
-    <Panel IsVisible="{Binding IsLoading}"> -->
-      <!-- Loading spinner -->
-    <!-- </Panel> -->
+    <controls:DataGrid ItemsSource="{Binding Results}" AutoGenerateColumns="True" IsVisible="{Binding !HasError}" IsReadOnly="True" />
+    
+    <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding HasError}"/>
+
+    <Border Background="#AA000000" IsVisible="{Binding IsLoading}">
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Background="#1F2937" Padding="40" CornerRadius="16">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Loading Results..." Foreground="White" HorizontalAlignment="Center"/>
+                <ProgressBar IsIndeterminate="True" Width="100"/>
+            </StackPanel>
+        </Border>
+    </Border>
   </Grid>
 </UserControl>

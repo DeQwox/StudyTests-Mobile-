@@ -9,7 +9,9 @@ namespace OnlineTestingClient;
 public partial class App : Application
 {
     public static string? CurrentToken { get; set; }
-    public static MainWindowViewModel Services { get; internal set; } = new("");
+    public static string? CurrentUserId { get; set; }
+
+    public static MainWindowViewModel MainViewModel { get; private set; } = null!;
 
     public override void Initialize()
     {
@@ -20,7 +22,14 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow();
+            MainViewModel = new MainWindowViewModel();
+
+            desktop.MainWindow = new MainWindow
+            {
+                DataContext = MainViewModel
+            };
+
+            MainViewModel.ShowLogin();
         }
 
         base.OnFrameworkInitializationCompleted();

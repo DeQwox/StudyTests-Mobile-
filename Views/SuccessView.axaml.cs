@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace OnlineTestingClient.Views;
 
-public partial class MainWindow : Window
+public partial class SuccessView : UserControl
 {
-    public MainWindow()
+    public SuccessView()
     {
         InitializeComponent();
     }

@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:OnlineTestingClient.ViewModels"
+             x:Class="OnlineTestingClient.Views.TakeTestView">
+  <ScrollViewer>
+    <StackPanel Margin="20" Spacing="20">
+      <TextBlock Text="{Binding Test.Name}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+      <TextBlock Text="{Binding Test.Description}" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+
+      <ItemsControl ItemsSource="{Binding Questions}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,15" Background="White">
+              <StackPanel Spacing="10">
+                <TextBlock Text="{Binding Model.Description}" FontWeight="SemiBold" FontSize="16"/>
+                
+                <!-- Simple RadioButton list for answers. 
+                     Note: Avalonia RadioButtons in an ItemsControl might need GroupName handling if not careful, 
+                     but here we are inside a DataTemplate so scope is usually fine per item if we structure it right.
+                     However, binding SelectedIndex to RadioButtons is tricky. 
+                     Let's use a ListBox with RadioButton style items or just a ListBox. -->
+                
+                <ListBox ItemsSource="{Binding Model.Answers}" SelectedIndex="{Binding SelectedAnswerIndex}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <StackPanel Orientation="Horizontal" Spacing="20" HorizontalAlignment="Center" Margin="0,20,0,0">
+        <Button Command="{Binding SubmitCommand}" Content="Завершити тест" Background="#10B981" Foreground="White" Padding="20,10"/>
+        <Button Command="{Binding CancelCommand}" Content="Скасувати" Background="#EF4444" Foreground="White" Padding="20,10"/>
+      </StackPanel>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

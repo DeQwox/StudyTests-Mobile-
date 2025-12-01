@@ -1,10 +1,11 @@
+// Views/ChartView.axaml.cs
 using Avalonia.Controls;
 
 namespace OnlineTestingClient.Views;
 
-public partial class MainWindow : Window
+public partial class ChartView : UserControl
 {
-    public MainWindow()
+    public ChartView()
     {
         InitializeComponent();
     }

@@ -13,7 +13,9 @@ public class TestResult { public int Id { get; set; } public string TestName { g
 public partial class ResultsViewModel : ViewModelBase
 {
     [ObservableProperty] private ObservableCollection<TestResult> results = new();
-    [ObservableProperty] private bool isLoading;
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(HasError))] private string errorMessage = "";
+    public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+
     private readonly HttpClient _httpClient = new() { BaseAddress = new Uri("https://localhost:5001/") };
     private string _userId;
 
@@ -26,8 +28,21 @@ public partial class ResultsViewModel : ViewModelBase
     private async void LoadResults()
     {
         IsLoading = true;
-        var data = await _httpClient.GetFromJsonAsync<List<TestResult>>($"api/tests/results?userId={_userId}");
-        Results = new ObservableCollection<TestResult>(data ?? new List<TestResult>());
-        IsLoading = false;
+        ErrorMessage = "";
+        try
+        {
+            using var client = new HttpClient { BaseAddress = new Uri(Models.AppState.ApiBaseUrl ?? "https://localhost:5001/") };
+            var data = await client.GetFromJsonAsync<List<TestResult>>($"api/tests/results?userId={_userId}");
+            Results = new ObservableCollection<TestResult>(data ?? new List<TestResult>());
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Failed to load results: " + ex.Message;
+            Results = new ObservableCollection<TestResult>();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 }
